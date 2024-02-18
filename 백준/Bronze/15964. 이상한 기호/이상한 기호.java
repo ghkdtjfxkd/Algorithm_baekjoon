@@ -7,8 +7,10 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         String[] input = br.readLine().split(" ");
-        int a = Integer.parseInt(input[0]);
-        int b = Integer.parseInt(input[1]);
-        System.out.println((a+b) * (a-b));
+        long a = Integer.parseInt(input[0]);
+        long b = Integer.parseInt(input[1]);
+
+        long cal = (a+b) * (a-b);
+        System.out.println(cal);
     }
 }
