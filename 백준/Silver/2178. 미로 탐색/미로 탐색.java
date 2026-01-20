@@ -1,90 +1,62 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    private static int n;
-    private static int m;
+    static int[] dx = {1, -1, 0, 0};
+    static int[] dy = {0, 0, 1, -1};
 
-    private static int[][] maze;
-    static boolean[][] visitedArr;
-    private static final int WALL = 0;
-
-    static int[] dRow = {-1, 1, 0, 0};
-    static int[] dCol = {0, 0, -1, 1};
-
+    static int n = 0;
+    static int m = 0;
+    static int[][] maze;
+    static boolean[][] visited;
 
     public static void main(String[] args) throws IOException {
-        String[] input = br.readLine().split(" ");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        n = Integer.parseInt(input[0]);
-        m = Integer.parseInt(input[1]);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
         maze = new int[n][m];
-        visitedArr = new boolean[n][m];
+        visited = new boolean[n][m];
 
         for (int i = 0; i < n; i++) {
-            String[] mazeLine = br.readLine().split("");
+            String s = br.readLine();
             for (int j = 0; j < m; j++) {
-                maze[i][j] = Integer.parseInt(mazeLine[j]);
+                maze[i][j] = s.charAt(j) - '0';
             }
         }
-
-        visitedArr[0][0] = true;
-        bfs(0, 0);
-        System.out.println(maze[n - 1][m - 1]);
-
+        bfs();
+        System.out.println(maze[n-1][m-1]);
     }
 
-    static boolean inMaze(int row, int col) {
-        if (row < 0 || col < 0 || row >= n || col >= m) {
-            return false;
-        }
-        return true;
-    }
+    static void bfs() {
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{0, 0});
+        visited[0][0] = true;
 
-    static boolean correctDirection(int row, int col) {
-        if (maze[row][col] == WALL || visitedArr[row][col]) {
-            return false;
-        }
-        return true;
-    }
-
-    static boolean possibleToMove(int row, int col) {
-        if (!inMaze(row, col)) {
-            return false;
-        } else if (!correctDirection(row, col)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    static void bfs(int row, int col) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{row, col});
-
-        while (!queue.isEmpty()) {
-            int now[] = queue.poll();
-
-            int nowRow = now[0];
-            int nowCol = now[1];
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            int r = cur[0];
+            int c = cur[1];
+            int pre = maze[r][c];
 
             for (int i = 0; i < 4; i++) {
-                int nextRow = nowRow + dRow[i];
-                int nextCol = nowCol + dCol[i];
+                int nr = r + dx[i];
+                int nc = c + dy[i];
 
-                if (!possibleToMove(nextRow, nextCol)) {
-                    continue;
+                if (nr < 0 || nc < 0 || nr >= n || nc >= m) continue;
+                if (!visited[nr][nc] && maze[nr][nc] != 0) {
+                    q.offer(new int[]{nr, nc});
+                    visited[nr][nc] = true;
+                    maze[nr][nc] = pre + 1;
                 }
-
-                queue.add(new int[]{nextRow, nextCol});
-                maze[nextRow][nextCol] = maze[nowRow][nowCol] + 1;
-                visitedArr[nextRow][nextCol] = true;
             }
         }
     }
