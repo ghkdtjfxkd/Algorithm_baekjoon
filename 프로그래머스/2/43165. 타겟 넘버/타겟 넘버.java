@@ -1,23 +1,28 @@
-import java.util.*;
-
 class Solution {
-    
-    int answer = 0;
-    
     public int solution(int[] numbers, int target) {
-        dfs(numbers, target, 0, 0);
-        return answer; 
+        return bfs(numbers, 0, target, 0);
     }
     
-    void dfs(int[] numbers, int target, int depth, int sum) {
-        if (depth == numbers.length) {
-            if (sum == target) {
-                answer++;
-            }
-            return;
+    public static int bfs(int[] numbers, int idx, int target, int sum) {
+        
+        if(idx == numbers.length) {
+            return 0;
         }
         
-        dfs(numbers, target, depth + 1, sum + numbers[depth]); 
-        dfs(numbers, target, depth + 1, sum - numbers[depth]); 
+        if(idx == numbers.length - 1) {
+            
+            if(sum + numbers[idx] == target) {
+                return 1;
+            }
+            
+            if(sum - numbers[idx] == target) {
+                return 1;
+            }
+            
+            return 0;
+        }
+        
+        return bfs(numbers, idx + 1, target, sum - numbers[idx]) + 
+            bfs(numbers, idx + 1, target, sum + numbers[idx]);
     }
 }
