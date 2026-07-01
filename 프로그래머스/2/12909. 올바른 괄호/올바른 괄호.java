@@ -3,23 +3,42 @@ import java.util.*;
 class Solution {
     boolean solution(String s) {
         boolean answer = true;
+
+        char[] parentheses = s.toCharArray();
         
-        if(s.startsWith(")") || s.endsWith("(")) {
-            return false;
-        }
+        Stack<Character> st = new Stack<>();
+        
+        for(char c : parentheses) {
             
-        Stack<Character> stack = new Stack<>();
-        
-        for(char c : s.toCharArray()) {
-            if(c == '(') {
-                stack.push(c);
-            } else {
-                if(stack.isEmpty()) {
+            if(st.isEmpty()) {
+                
+                if(c == ')') {
                     return false;
                 }
-                stack.pop();
+                
+                st.push(c);
+                continue;
             }
+            
+            if(c == '(') {
+                st.push(c);
+            }
+            
+            if(st.peek() == '(') {
+                if(c == ')') {
+                    st.pop();
+                }
+            }
+            
         }
-        return stack.isEmpty();
+        
+        if(!st.isEmpty()) {
+            return false;
+        }
+        
+        // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
+        System.out.println("Hello Java");
+
+        return answer;
     }
 }
