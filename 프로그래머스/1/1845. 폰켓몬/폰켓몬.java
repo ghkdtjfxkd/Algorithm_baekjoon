@@ -1,14 +1,14 @@
 import java.util.*;
-
 class Solution {
     public int solution(int[] nums) {
-        int pick = nums.length / 2;
+        Set<Integer> uq = new HashSet<>();
         
-        Set<Integer> ps = new HashSet<>();
+        int half = nums.length/2;
         
-        Arrays.stream(nums).forEach(n -> ps.add(n));
-        int uniqueType = ps.size();
-        
-        return pick < uniqueType ? pick : uniqueType;
+        for (int n : nums) {
+            uq.add(n);
+        }
+            
+        return Math.min(uq.size(), half);
     }
 }
